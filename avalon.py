@@ -26,7 +26,7 @@ avalon = Flask(__name__)
 
 @avalon.route('/', methods=['GET'])
 def getIdentityForm():
-    return '''<form action="/" method="post">
+    return '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">' + '''<form action="/" method="post">
     <p>输入本次游戏总人数(1~10)Input the number of PLAYERS:<input name="PlayersNumber"></p>
     <p>输入刚刚共同决定的本次游戏的数字Input the GAME NUMBER we just decided together:<input name="GameNumber"></p>
     <p>输入座位号(从1开始计数)Input your own SEAT NUMBER:<input name="SeatNumber"></p>
@@ -52,7 +52,7 @@ def getIdentity():
 
     random.seed(gameNumber)
     random.shuffle(identities)
-    ret = '<h2>你的身份是Your Identity is ' + identities[int(seatNumber) - 1] + '</h2>'
+    ret = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">' + '<h2>你的身份是Your Identity is ' + identities[int(seatNumber) - 1] + '</h2>'
 
     if identities[int(seatNumber) - 1] == '梅林Merlin':
         seenPlayers = []
@@ -90,5 +90,5 @@ def getIdentity():
     return ret
 
 if __name__ == '__main__':
-    avalon.run()
+    avalon.run(host='0.0.0.0', port=5001, debug=True)
     
