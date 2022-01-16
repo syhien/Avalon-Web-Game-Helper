@@ -1,3 +1,4 @@
+from datetime import date
 from flask import Flask
 from flask import request
 import random
@@ -50,7 +51,7 @@ def getIdentity():
         }
     identities = identitiesMap[playersNumber]
 
-    random.seed(gameNumber)
+    random.seed(gameNumber + date.today().toordinal())
     random.shuffle(identities)
     ret = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">' + '<h2>你的身份是Your Identity is ' + identities[int(seatNumber) - 1] + '</h2>'
 
