@@ -1,6 +1,7 @@
 from datetime import date
 from flask import Flask
 from flask import request
+from flask import jsonify
 import random
 
 def handleCORS(response):
@@ -9,26 +10,6 @@ def handleCORS(response):
 
 avalon = Flask(__name__)
 avalon.after_request(handleCORS)
-
-# @app.route('/', methods=['GET', 'POST'])
-# def home():
-#     return '<h1>Home</h1>'
-
-# @app.route('/signin', methods=['GET'])
-# def signin_form():
-#     return '''<form action="/signin" method="post">
-#               <p><input name="username"></p>
-#               <p><input name="password" type="password"></p>
-#               <p><button type="submit">Sign In</button></p>
-#               </form>'''
-
-# @app.route('/signin', methods=['POST'])
-# def signin():
-#     # 需要从request对象读取表单内容：
-#     if request.form['username']=='admin' and request.form['password']=='password':
-#         return '<h3>Hello, admin!</h3>'
-#     return '<h3>Bad username or password.</h3>'
-
 
 @avalon.route('/', methods=['GET'])
 def getIdentityForm():
@@ -47,53 +28,52 @@ def getIdentity():
     seatNumber = int(request.form['SeatNumber'])
 
     identitiesMap = {
-        5:['梅林Merlin', '派西维尔Percival', '亚瑟的忠臣Loyal Servant of Arthur', '莫甘娜Morgana', '刺客Assassin'],
-        6:['梅林Merlin', '派西维尔Percival', '亚瑟的忠臣Loyal Servant of Arthur', '莫甘娜Morgana', '刺客Assassin', '亚瑟的忠臣Loyal Servant of Arthur'],
-        7:['梅林Merlin', '派西维尔Percival', '亚瑟的忠臣Loyal Servant of Arthur', '莫甘娜Morgana', '刺客Assassin', '亚瑟的忠臣Loyal Servant of Arthur', '奥伯伦Oberon'],
-        8:['梅林Merlin', '派西维尔Percival', '亚瑟的忠臣Loyal Servant of Arthur', '莫甘娜Morgana', '刺客Assassin', '亚瑟的忠臣Loyal Servant of Arthur', '亚瑟的忠臣Loyal Servant of Arthur', '莫德雷德的爪牙Minion of Mordred'],
-        9:['梅林Merlin', '派西维尔Percival', '亚瑟的忠臣Loyal Servant of Arthur', '莫甘娜Morgana', '刺客Assassin', '亚瑟的忠臣Loyal Servant of Arthur', '亚瑟的忠臣Loyal Servant of Arthur', '亚瑟的忠臣Loyal Servant of Arthur', '莫德雷德Mordred'],
-        10:['梅林Merlin', '派西维尔Percival', '亚瑟的忠臣Loyal Servant of Arthur', '莫甘娜Morgana', '刺客Assassin', '亚瑟的忠臣Loyal Servant of Arthur', '亚瑟的忠臣Loyal Servant of Arthur', '亚瑟的忠臣Loyal Servant of Arthur', '莫德雷德Mordred', '奥伯伦Oberon']
+        5:['Merlin', 'Percival', 'Loyal Servant of Arthur', 'Morgana', 'Assassin'],
+        6:['Merlin', 'Percival', 'Loyal Servant of Arthur', 'Morgana', 'Assassin', 'Loyal Servant of Arthur'],
+        7:['Merlin', 'Percival', 'Loyal Servant of Arthur', 'Morgana', 'Assassin', 'Loyal Servant of Arthur', 'Oberon'],
+        8:['Merlin', 'Percival', 'Loyal Servant of Arthur', 'Morgana', 'Assassin', 'Loyal Servant of Arthur', 'Loyal Servant of Arthur', 'Minion of Mordred'],
+        9:['Merlin', 'Percival', 'Loyal Servant of Arthur', 'Morgana', 'Assassin', 'Loyal Servant of Arthur', 'Loyal Servant of Arthur', 'Loyal Servant of Arthur', 'Mordred'],
+        10:['Merlin', 'Percival', 'Loyal Servant of Arthur', 'Morgana', 'Assassin', 'Loyal Servant of Arthur', 'Loyal Servant of Arthur', 'Loyal Servant of Arthur', 'Mordred', 'Oberon']
         }
     identities = identitiesMap[playersNumber]
 
     random.seed(gameNumber + date.today().toordinal())
     random.shuffle(identities)
-    ret = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">' + '<h2>你的身份是Your Identity is ' + identities[int(seatNumber) - 1] + '</h2>'
+    ret = {'identity': identities[int(seatNumber) - 1]}
 
-    if identities[int(seatNumber) - 1] == '梅林Merlin':
+    if identities[int(seatNumber) - 1] == 'Merlin':
         seenPlayers = []
         for i in range(len(identities)):
-            if identities[i] in ['莫甘娜Morgana', '刺客Assassin', '奥伯伦Oberon']:
+            if identities[i] in ['Morgana', 'Assassin', 'Oberon']:
                 seenPlayers.append(i + 1)
-        ret += '<h2>你看到了You saw: ' + str(seenPlayers) + '</h2>'
-    elif identities[int(seatNumber) - 1] == '派西维尔Percival':
+        ret['seenPlayers'] = seenPlayers
+    elif identities[int(seatNumber) - 1] == 'Percival':
         seenPlayers = []
         for i in range(len(identities)):
-            if identities[i] in ['梅林Merlin', '莫甘娜Morgana']:
+            if identities[i] in ['Merlin', 'Morgana']:
                 seenPlayers.append(i + 1)
-        ret += '<h2>你看到了You saw: ' + str(seenPlayers) + '</h2>'
-    elif identities[int(seatNumber) - 1] == '莫甘娜Morgana':
+        ret['seenPlayers'] = seenPlayers
+    elif identities[int(seatNumber) - 1] == 'Morgana':
         seenPlayers = []
         for i in range(len(identities)):
-            if identities[i] in ['刺客Assassin', '莫德雷德Mordred']:
+            if identities[i] in ['Assassin', 'Mordred']:
                 seenPlayers.append(i + 1)
-        ret += '<h2>你看到了You saw: ' + str(seenPlayers) + '</h2>'
-    elif identities[int(seatNumber) - 1] == '刺客Assassin':
+        ret['seenPlayers'] = seenPlayers
+    elif identities[int(seatNumber) - 1] == 'Assassin':
         seenPlayers = []
         for i in range(len(identities)):
-            if identities[i] in ['莫甘娜Morgana', '莫德雷德Mordred']:
+            if identities[i] in ['Morgana', 'Mordred']:
                 seenPlayers.append(i + 1)
-        ret += '<h2>你看到了You saw: ' + str(seenPlayers) + '</h2>'
-    elif identities[int(seatNumber) - 1] == '莫德雷德Mordred':
+        ret['seenPlayers'] = seenPlayers
+    elif identities[int(seatNumber) - 1] == 'Mordred':
         seenPlayers = []
         for i in range(len(identities)):
-            if identities[i] in ['莫甘娜Morgana', '刺客Assassin']:
+            if identities[i] in ['Morgana', 'Assassin']:
                 seenPlayers.append(i + 1)
-        ret += '<h2>你看到了You saw: ' + str(seenPlayers) + '</h2>'
+        ret['seenPlayers'] = seenPlayers
     else:
-        ret += '<h2>你什么也没看到You saw nobody</h2>'
-        ret += '<h3>不是先知，胜似先知Saw nothing, but will know anything</h3>'
-    return ret
+        ret['seenPlayers'] = []
+    return jsonify(ret)
 
 if __name__ == '__main__':
     avalon.run(host='0.0.0.0', port=5001, debug=True)
