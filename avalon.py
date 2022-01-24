@@ -3,7 +3,12 @@ from flask import Flask
 from flask import request
 import random
 
+def handleCORS(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
 avalon = Flask(__name__)
+avalon.after_request(handleCORS)
 
 # @app.route('/', methods=['GET', 'POST'])
 # def home():
