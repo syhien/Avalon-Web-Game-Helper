@@ -56,13 +56,13 @@ def getIdentity():
     elif identities[int(seatNumber) - 1] == 'Morgana':
         seenPlayers = []
         for i in range(len(identities)):
-            if identities[i] in ['Assassin', 'Mordred']:
+            if identities[i] in ['Assassin', 'Mordred', 'Minion of Mordred']:
                 seenPlayers.append(i + 1)
         ret['seenPlayers'] = seenPlayers
     elif identities[int(seatNumber) - 1] == 'Assassin':
         seenPlayers = []
         for i in range(len(identities)):
-            if identities[i] in ['Morgana', 'Mordred']:
+            if identities[i] in ['Morgana', 'Mordred', 'Minion of Mordred']:
                 seenPlayers.append(i + 1)
         ret['seenPlayers'] = seenPlayers
     elif identities[int(seatNumber) - 1] == 'Mordred':
