@@ -71,6 +71,12 @@ def getIdentity():
             if identities[i] in ['Morgana', 'Assassin']:
                 seenPlayers.append(i + 1)
         ret['seenPlayers'] = seenPlayers
+    elif identities[int(seatNumber) - 1] == 'Minion of Mordred':
+        seenPlayers = []
+        for i in range(len(identities)):
+            if identities[i] in ['Morgana', 'Assassin']:
+                seenPlayers.append(i + 1)
+        ret['seenPlayers'] = seenPlayers
     else:
         ret['seenPlayers'] = []
     return jsonify(ret)
